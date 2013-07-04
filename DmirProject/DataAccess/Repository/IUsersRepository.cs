@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DataAccess
+namespace DAL
 {
-
-    // На самом деле надо было назвать IUsersRepository и убрать слово Users из навания методов.
-    public interface IRepository
+    public interface IUsersRepository
     {
-        IEnumerable<User> GetUsersContainsString(int count, string content);
-        IEnumerable<User> GetUsers();
-        void InsertUsers(IEnumerable<User> users);
+        IEnumerable<User> Get(int count, string contains);
+        IEnumerable<User> Get();
+        void Insert(IEnumerable<User> users);
     }
 }

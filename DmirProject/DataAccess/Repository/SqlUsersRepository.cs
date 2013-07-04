@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ninject;
 
-namespace DataAccess
+namespace DAL
 {
     public class SqlUsersRepository : IUsersRepository
     {
@@ -17,17 +17,17 @@ namespace DataAccess
         [Inject]
         DataAccessContext Db { get; set; }
 
-        public IEnumerable<User> GetUsersContainsString(int count, string content)
+        public IEnumerable<User> Get(int count, string content)
         {
             return Db.Users.Where(u => u.UserName.Contains(content));
         }
 
-        public IEnumerable<User> GetUsers()
+        public IEnumerable<User> Get()
         {
             return Db.Users.ToArray();
         }
 
-        public void InsertUsers(IEnumerable<User> users)
+        public void Insert(IEnumerable<User> users)
         {
             var usersInDb = Db.Users.ToArray();
 

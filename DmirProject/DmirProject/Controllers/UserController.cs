@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Ninject;
-using DataAccess;
+using DAL;
 using System.IO;
 
 namespace DmirProject.Controllers
@@ -12,13 +12,13 @@ namespace DmirProject.Controllers
     public class UserController : Controller
     {
         [Inject]
-        public IRepository Repository { get; set; }
+        public IUsersRepository UsersRepository { get; set; }
 
-        public ActionResult Index(IRepository repo)
+        public ActionResult Index(IUsersRepository repo)
         {
             //IEnumerable<User> users;
 
-            var users = repo.GetUsers();
+            var users = repo.Get();
 
             return View(users);
         }

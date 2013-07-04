@@ -11,11 +11,11 @@ using System.IO;
 
 namespace BusinessLayer
 {
-    public class UsersServiceLogic : IUsersService
+    public class UsersService : IUsersService
     {
-        IUsersRepository _usersRepository;
+        readonly IUsersRepository _usersRepository;
 
-        public UsersServiceLogic(IUsersRepository usersRepository)
+        public UsersService(IUsersRepository usersRepository)
         {
             _usersRepository = usersRepository;
         }
@@ -25,18 +25,16 @@ namespace BusinessLayer
             var users = _usersRepository.Get().OrderByDescending(u => u.BirthDate);
 
             return users
-                .GroupBy(u => u.BirthDate.Year, (birthYear, userList) => 
-                {
-                    return userList.Where(u => u.BirthDate.Year == birthYear);
-                })
+                .GroupBy(u => u.BirthDate.Year, (birthYear, userList) => userList.Where(u => u.BirthDate.Year == birthYear))
                 .Select(u => new AgeCount {
                     Count = u.Count(),
                     Age = DateTime.Now.Year - u.First().BirthDate.Year
-                }).ToArray();
+                });
         }
 
         public void InsertFromStream(Stream source)
         {
+            // RdL На самом деле тут не нужна фабрика. Тут нужно прокидывать через DI.
             var users = ParserFactory.GetUsersParser(ParserType.CSV).Parse(source);
             _usersRepository.Insert(users);
         }

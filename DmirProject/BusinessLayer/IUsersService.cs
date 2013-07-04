@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer
 {
-    public interface IBusiness
+    public interface IUsersService
     {
-        IEnumerable<AgeCount> UsersCountBirthdays();
-        void InsertUsersFromStream(Stream stream);
+        IEnumerable<AgeCount> GetBirthdaysCount();
+        void InsertFromStream(Stream source);
     }
 }
