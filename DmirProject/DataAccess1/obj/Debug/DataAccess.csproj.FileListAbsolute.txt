@@ -1,1 +1,0 @@
-c:\users\kup\documents\visual studio 2012\Projects\DmirProject\DataAccess\obj\Debug\DataAccess.csprojResolveAssemblyReference.cache
