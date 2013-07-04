@@ -25,6 +25,7 @@ namespace DmirProject.Controllers
 
         public void Index(StreamReader users)
         {
+            // Что это????
             var userStr = users.ReadToEnd();
         }
     }
