@@ -30,6 +30,7 @@ namespace EssentialTools.Infrastructure
         }
         private void AddBindings()
         {
+            // RdL Вот это лучше вынести в отдельный класс в папке AppStart.
             kernel.Bind<DataAccessContext>().ToMethod(d => new DataAccessContext(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString)).InRequestScope();
             kernel.Bind<IRepository>().To<SqlRepository>();
             kernel.Bind<IBusiness>().To<BusinessLogic>();
