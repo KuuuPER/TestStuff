@@ -21,6 +21,7 @@ using Ninject.Infrastructure.Disposal;
 using Ninject.Planning.Bindings;
 #endregion
 
+// RdL На самом деле в NuGet есть пакет для подключения ninject. Можно было просто заюзать его.
 namespace Ninject.Syntax
 {
         /// <summary>

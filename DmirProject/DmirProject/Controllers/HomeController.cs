@@ -8,17 +8,17 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using BusinessLayer;
-using DataAccess;
+using DAL;
 
 namespace DmirProject.Controllers
 {
     public class HomeController : Controller
     {
-        private IBusiness _business;
+        private IUsersService _usersService;
 
-        public HomeController(IBusiness business)
+        public HomeController(IUsersService usersService)
         {
-            _business = business;
+            _usersService = usersService;
         }
 
         public ActionResult Index()
@@ -30,7 +30,7 @@ namespace DmirProject.Controllers
             //    users = ent.Users.ToArray();
             //}
 
-            var users = _business.UsersCountBirthdays();
+            var users = _usersService.GetBirthdaysCount();
 
             return View(users);
         }
@@ -43,7 +43,7 @@ namespace DmirProject.Controllers
 
             if (stream != null && stream.Length > 0)
             {
-                _business.InsertUsersFromStream(stream);
+                _usersService.InsertFromStream(stream);
             }
 
             return RedirectToAction("Index");

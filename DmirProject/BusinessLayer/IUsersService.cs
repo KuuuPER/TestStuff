@@ -1,14 +1,16 @@
 ﻿using DAL;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BusinessLayer
 {
-    public interface IParser
+    public interface IUsersService
     {
-        IEnumerable<User> Parse(object parsedObject);
+        IEnumerable<AgeCount> GetBirthdaysCount();
+        void InsertFromStream(Stream source);
     }
 }

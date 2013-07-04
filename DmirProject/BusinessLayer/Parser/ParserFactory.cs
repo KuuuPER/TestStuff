@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Parser
 {
+    // RdL Даже не смотря на то что фабрика не нужна, статическая фабрика - зло.
+    // Фабрику тоже можно прокинуть через DI.
     public static class ParserFactory
     {
         public static IParser GetUsersParser(ParserType type)

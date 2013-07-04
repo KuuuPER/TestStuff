@@ -6,7 +6,7 @@ using Ninject.Web.Common;
 using Ninject.Parameters;
 using Ninject.Syntax;
 using System.Configuration;
-using DataAccess;
+using DAL;
 using BusinessLayer;
 
 
@@ -30,9 +30,10 @@ namespace EssentialTools.Infrastructure
         }
         private void AddBindings()
         {
+            // RdL Вот это лучше вынести в отдельный класс в папке AppStart.
             kernel.Bind<DataAccessContext>().ToMethod(d => new DataAccessContext(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString)).InRequestScope();
-            kernel.Bind<IRepository>().To<SqlRepository>();
-            kernel.Bind<IBusiness>().To<BusinessLogic>();
+            kernel.Bind<IUsersRepository>().To<SqlUsersRepository>();
+            kernel.Bind<IUsersService>().To<UsersService>();
         }
     }
 }

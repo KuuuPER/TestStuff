@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataAccess
+namespace DAL
 {
     using System;
     using System.Collections.Generic;
@@ -16,6 +16,6 @@ namespace DataAccess
     {
         public int Id { get; set; }
         public string UserName { get; set; }
-        public System.DateTime BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
     }
 }
