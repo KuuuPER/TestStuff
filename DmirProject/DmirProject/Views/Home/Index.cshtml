@@ -1,0 +1,36 @@
+﻿@model IEnumerable<BusinessLayer.AgeCount>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@using(Html.BeginForm("UsersFile", "Home", FormMethod.Post, new {enctype = "multipart/form-data"}))
+{
+    <p>Загрузить файл</p>
+    <p><input type="file" id="terrFile" name="terrFile" accept="text/html">
+       <br/>
+       <input type="submit" value="Загрузить"></p>
+}
+
+<table>
+    <tr>
+        <td>
+            Количество
+        </td>
+        <td>
+            Возраст
+        </td>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.Count
+            </td>
+            <td>
+                @item.Age
+            </td>
+        </tr>
+    }
+</table>
