@@ -5,9 +5,7 @@ using Ninject;
 using Ninject.Web.Common;
 using Ninject.Parameters;
 using Ninject.Syntax;
-using System.Configuration;
-using DataAccess;
-using BusinessLayer;
+using DmirProject.App_Start;
 
 
 namespace EssentialTools.Infrastructure
@@ -30,9 +28,7 @@ namespace EssentialTools.Infrastructure
         }
         private void AddBindings()
         {
-            kernel.Bind<DataAccessContext>().ToMethod(d => new DataAccessContext(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString)).InRequestScope();
-            kernel.Bind<IRepository>().To<SqlRepository>();
-            kernel.Bind<IBusiness>().To<BusinessLogic>();
+            Bindings.Bind(kernel);
         }
     }
 }

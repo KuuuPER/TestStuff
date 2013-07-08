@@ -10,15 +10,14 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer
 {
-    class UsersFileParser : IParser
+    public class UsersFileParser : IParser
     {
         public IEnumerable<User> Parse(object stream)
         {
             var parsedString = new StreamReader(stream as Stream, Encoding.Default).ReadToEnd();
 
             var pattern = @".*[^\s]";
-            var userStr = Regex.Unescape(parsedString);
-            var matches = Regex.Matches(userStr, pattern);
+            var matches = Regex.Matches(parsedString, pattern);
 
             var users = new List<User>();
 

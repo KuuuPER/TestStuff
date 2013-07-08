@@ -14,19 +14,42 @@ namespace DataAccess
             Db = db;
         }
 
-        [Inject]
         DataAccessContext Db { get; set; }
 
-        public IEnumerable<User> GetUsersContainsString(int count, string content)
+        public IEnumerable<User> GetUsersContainsString(string content)
         {
-            return Db.Users.Where(u => u.UserName.Contains(content));
+            return Db.Users.Where(u => u.UserName.StartsWith(content));
         }
 
-        public IEnumerable<User> GetUsers()
+        public IEnumerable<AgeCount> GetUsersBirthdays()
         {
-            return Db.Users.ToArray();
+            return Db.Users
+                .Select(u => new
+                {
+                    Years = DateTime.Now.Year - u.BirthDate.Year,
+                    WasBirthday = DateTime.Now.Month < u.BirthDate.Month 
+                    || (DateTime.Now.Month == u.BirthDate.Month && DateTime.Now.Day < u.BirthDate.Day),
+                    Element = u
+                })
+                .Select(u => new
+                {
+                    Age = u.WasBirthday ? u.Years : (u.Years - 1),
+                    Element = u.Element
+                })
+                .GroupBy(u => u.Age)
+                .Select(e => 
+                    new AgeCount
+                    {
+                        Age = e.Key,
+                        Count = e.Count()
+                    })
+                .OrderByDescending(u => u.Count);
         }
 
+        /// <summary>
+        /// Insert in database if doesn't exist in current database
+        /// </summary>
+        /// <param name="users">inserted collection of users</param>
         public void InsertUsers(IEnumerable<User> users)
         {
             var usersInDb = Db.Users.ToArray();
@@ -45,5 +68,11 @@ namespace DataAccess
 
             Db.SaveChanges();
         }
+    }
+
+    public class AgeCount
+    {
+        public int Count { get; internal set; }
+        public int Age { get; internal set; }
     }
 }

@@ -1,36 +1,58 @@
-﻿@model IEnumerable<BusinessLayer.AgeCount>
+﻿@using DmirProject.ViewModel
+@model AgeCountModel
+
 @{
     ViewBag.Title = "Index";
+    Layout = "~/Views/Layout/MainLayout.cshtml";
 }
-
-<h2>Index</h2>
 
 @using(Html.BeginForm("UsersFile", "Home", FormMethod.Post, new {enctype = "multipart/form-data"}))
 {
     <p>Загрузить файл</p>
-    <p><input type="file" id="terrFile" name="terrFile" accept="text/html">
+    <p><input type="file" name="usersFile" accept="text/html">
        <br/>
        <input type="submit" value="Загрузить"></p>
 }
 
-<table>
-    <tr>
-        <td>
-            Количество
-        </td>
-        <td>
-            Возраст
-        </td>
-    </tr>
-    @foreach (var item in Model)
+<div class="content">
+    @if (Model != null
+        && Model.AgeCounts.Count() > 0)
     {
-        <tr>
-            <td>
-                @item.Count
-            </td>
-            <td>
-                @item.Age
-            </td>
-        </tr>
+        @:Найдено: @Model.TotalCount;
+        <table>
+            <tr>
+                <td>
+                    Количество
+                </td>
+                <td>
+                    Возраст
+                </td>
+            </tr>
+            @foreach (var item in Model.AgeCounts)
+            {
+                <tr>
+                    <td>
+                        @item.Count
+                    </td>
+                    <td>
+                        @item.Age
+                    </td>
+                </tr>
+            }
+        </table>
     }
+
+    
+</div>
+
+<table class="pagerTable">
+    <tr>
+        <td>Страницы:</td>
+        @for (int i = 0; i < Model.Pages; i++)
+        {
+            <td>
+                @Html.ActionLink((i+1).ToString(), "Index", "Home", new { n = i }, null)
+            </td>
+        }
+    </tr>
 </table>

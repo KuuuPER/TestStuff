@@ -10,7 +10,8 @@ namespace BusinessLayer
 {
     public interface IBusiness
     {
-        IEnumerable<AgeCount> UsersCountBirthdays();
-        void InsertUsersFromStream(Stream stream);
+        AgeCountCollection GetUsersBirthdays(int n, int elementsCount);
+        void InsertUsersFromStream(Stream stream, IParser parser);
+        UsersSubsequent FindUsers(string userName, int n, int elementsCount);
     }
 }

@@ -9,3 +9,4 @@ C:\Users\KuP\Documents\Visual Studio 2012\Projects\DmirProject\DataAccess\bin\De
 C:\Users\KuP\Documents\Visual Studio 2012\Projects\DmirProject\DataAccess\obj\Debug\DataAccess.csprojResolveAssemblyReference.cache
 C:\Users\KuP\Documents\Visual Studio 2012\Projects\DmirProject\DataAccess\obj\Debug\DataAccess.dll
 C:\Users\KuP\Documents\Visual Studio 2012\Projects\DmirProject\DataAccess\obj\Debug\DataAccess.pdb
+C:\Users\KuP\Documents\Visual Studio 2012\Projects\DmirProject\DataAccess\bin\Debug\DateTimeExtensions.dll

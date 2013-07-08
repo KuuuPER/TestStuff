@@ -9,44 +9,47 @@ using System.Text;
 using System.Text.RegularExpressions;
 using BusinessLayer;
 using DataAccess;
+using DmirProject.Infrastructure;
+using DmirProject.ViewModel;
 
 namespace DmirProject.Controllers
 {
     public class HomeController : Controller
     {
+        private IParser _parser;
         private IBusiness _business;
+        private PageConfig _pageConfig;
 
-        public HomeController(IBusiness business)
+        public HomeController(IParser parser, IBusiness business, PageConfig pageConfig)
         {
             _business = business;
+            _parser = parser;
+            _pageConfig = pageConfig;
         }
 
-        public ActionResult Index()
+        [HttpGet]
+        public ActionResult Index(int n = 0)
         {
-            //IEnumerable<User> users;
+            var usersBirthdays = _business.GetUsersBirthdays(n, _pageConfig.ElementsPerPage);
 
-            //using (var ent = new DataEntitiesContext())
-            //{
-            //    users = ent.Users.ToArray();
-            //}
-
-            var users = _business.UsersCountBirthdays();
-
-            return View(users);
+            return View(new AgeCountModel
+            {
+                AgeCounts = usersBirthdays.AgeCounts,
+                TotalCount = usersBirthdays.TotalElementsCount,
+                Pages = (int)Math.Ceiling((double)usersBirthdays.TotalElementsCount / (double)_pageConfig.ElementsPerPage)
+            });
         }
 
-        public ActionResult UsersFile(HttpPostedFileBase terrFile)
+        public ActionResult UsersFile(HttpPostedFileBase usersFile)
         {
-            var contentType = terrFile.ContentType;
-
-            var stream = terrFile.InputStream;
+            var stream = usersFile.InputStream;
 
             if (stream != null && stream.Length > 0)
             {
-                _business.InsertUsersFromStream(stream);
+                _business.InsertUsersFromStream(stream, _parser);
             }
 
             return RedirectToAction("Index");
-        }
+        }        
     }
 }

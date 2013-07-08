@@ -7,8 +7,8 @@ namespace DataAccess
 {
     public interface IRepository
     {
-        IEnumerable<User> GetUsersContainsString(int count, string content);
-        IEnumerable<User> GetUsers();
+        IEnumerable<User> GetUsersContainsString(string content);
+        IEnumerable<AgeCount> GetUsersBirthdays();
         void InsertUsers(IEnumerable<User> users);
     }
 }

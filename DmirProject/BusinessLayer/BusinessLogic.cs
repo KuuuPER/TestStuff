@@ -20,31 +20,87 @@ namespace BusinessLayer
             _repository = repository;
         }
 
-        public IEnumerable<AgeCount> UsersCountBirthdays()
+        /// <summary>
+        /// Skip first n*30 elements and returns next 30 elements. When n == 0, method returns first 30 elements.
+        /// When n == 1, method skip first 30 elements and returtn from 30 to 60 elements.
+        /// </summary>
+        /// <param name="n">Skip first n*30 elemets</param>
+        /// <returns>30 elements</returns>
+        public AgeCountCollection GetUsersBirthdays(int n, int elementsCount)
         {
-            var users = _repository.GetUsers().OrderByDescending(u => u.BirthDate);
+            var usersBirthdays = _repository.GetUsersBirthdays();
 
-            return users
-                .GroupBy(u => u.BirthDate.Year, (birthYear, userList) => 
-                {
-                    return userList.Where(u => u.BirthDate.Year == birthYear);
-                })
-                .Select(u => new AgeCount {
-                    Count = u.Count(),
-                    Age = DateTime.Now.Year - u.First().BirthDate.Year
-                }).ToArray();
+            return new AgeCountCollection
+            {
+                TotalElementsCount = usersBirthdays.Count(),
+                AgeCounts = usersBirthdays
+                .Skip(n * elementsCount)
+                .Take(elementsCount)
+            };
         }
 
-        public void InsertUsersFromStream(Stream stream)
+
+        /// <summary>
+        /// Parses the stream content and getting data from it.
+        /// Then normalized a UserName and insert to database.
+        /// </summary>
+        /// <param name="stream">Stream with a file</param>
+        /// <param name="parser">Parser which parses the file from stream</param>
+        public void InsertUsersFromStream(Stream stream, IParser parser)
         {
-            var users = ParserFactory.GetUsersParser(ParserType.CSV).Parse(stream);
+            var users = parser.Parse(stream);
+
+            foreach (var user in users)
+            {
+                user.UserName = NormalizeUsername(user.UserName);
+            }
+
             _repository.InsertUsers(users);
+        }
+
+        public UsersSubsequent FindUsers(string userName, int n, int elementsCount)
+        {
+            if (string.IsNullOrEmpty(userName))
+                return null;
+
+            var users = _repository.GetUsersContainsString(userName);
+
+            return new UsersSubsequent
+            {
+                TotalCount = users.Count(),
+                Users = users
+                .Skip(n * elementsCount)
+                .Take(elementsCount)
+            };
+        }
+        
+        private string NormalizeUsername(string userName)
+        {
+            var chars = userName
+                        .ToLowerInvariant()
+                        .ToCharArray();
+
+            chars[0] = chars[0]
+                .ToString()
+                .ToUpper()
+                .ToCharArray()
+                .First();
+
+            return new string(chars);
         }
     }
 
-    public class AgeCount
+    public class AgeCountCollection
     {
-        public int Count { get; internal set; }
-        public int Age { get; internal set; }
+        public int TotalElementsCount { get; internal set; }
+
+        public IEnumerable<AgeCount> AgeCounts { get; internal set; }
+    }
+
+    public class UsersSubsequent
+    {
+        public int TotalCount { get; set; }
+
+        public IEnumerable<User> Users { get; set; }
     }
 }

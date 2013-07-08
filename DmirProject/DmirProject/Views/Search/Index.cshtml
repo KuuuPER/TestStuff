@@ -1,0 +1,59 @@
+﻿@using DmirProject.ViewModel
+@model SearchModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Layout/MainLayout.cshtml";
+}
+
+@using (Html.BeginForm("FindUsers", "Search", FormMethod.Post))
+{
+    <p>Загрузить файл</p>
+    <p>
+        @Html.LabelFor(m => m.SearchName)
+        <br/>
+        @Html.EditorFor(m => m.SearchName)
+        @Html.ValidationMessageFor(m => m.SearchName)
+       <br/>
+       <input type="submit" value="Найти">
+    </p>
+}
+
+@if (Model != null 
+    && Model.Users != null
+    && Model.Users.Count() > 0)
+{
+    @:Найдено: @Model.TotalCount
+<table>
+    <tr>
+        <th>
+            Имя
+        </th>
+        <th>
+            Дата рождения
+        </th>
+    </tr>
+        @foreach (var user in Model.Users)
+        {
+         <tr>
+            <td>
+                @user.UserName
+            </td>
+             <td>
+                 @user.BirthDate.ToString("dd.MM.yyyy")
+             </td>
+        </tr>
+        }
+</table>
+
+    <table class="pagerTable">
+        <tr>
+            <td>Страницы:</td>
+            @for (int i = 0; i < Model.Pages; i++)
+            {
+                <td>
+                    @Html.ActionLink((i+1).ToString(), "FindUsers", "Search", new { SearchName = Model.SearchName, n = i }, null)
+                </td>
+            }
+        </tr>
+    </table>
+}

@@ -14,9 +14,15 @@ namespace DmirProject
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "FindUsers",
+                url: "Search/{action}/{n}",
+                defaults: new {controller = "Search", action = "FindUsers", n = UrlParameter.Optional }
+                );
+
+            routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                url: "{controller}/{action}/{n}",
+                defaults: new { controller = "Home", action = "Index", n = UrlParameter.Optional }
             );
         }
     }
